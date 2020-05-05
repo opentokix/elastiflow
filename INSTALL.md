@@ -199,12 +199,14 @@ backoff_ms: Number of milliseconds to wait to reconnect.
 [Flow source] -> [LogStash filtering] -> [ES]
 
 **Kafka Design:**
-[Flow source] -> [LogStash] -> [Kafka] -> [LogStash filtering] -> [ES]
+[Flow source] -> [LogStash] --(json)--> [Kafka] --(json)--> [LogStash filtering] -> [ES]
 
 * [Kafka output](logstash/elastiflow/conf.d/15_kafka_tansport.logstash.conf.disabled)
 * [Kafka input](logstash/elastiflow/conf.d/18_kafka_transport.logstash.conf.disabled)
 
-Replication factor can not be larger than your available number of brokers. 
+Replication factor can not be larger than your available number of brokers.
+
+If you have nine partitions, you will be able to have nine parallell logstash instances working on events in kafka. To increase the thruput. You can also horizontally scale both kafka cluster and the logstash ingests. 
 
 ```
 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 9 --topic ipfix
