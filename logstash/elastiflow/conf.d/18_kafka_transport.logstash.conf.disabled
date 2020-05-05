@@ -8,8 +8,6 @@ input {
     security_protocol => "PLAINTEXT"
     topics => ["ipfix", "sflow", "netflow" ]
     codec => "plain"
-    enable_metric => true
-    id => "elastiflow_kafka_input"
-    type => "[@metadata][kafka][topic]"
+    type => "${[@metadata][kafka][topic]}"
   }
 }

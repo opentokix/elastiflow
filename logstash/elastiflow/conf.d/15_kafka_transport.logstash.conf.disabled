@@ -1,14 +1,12 @@
 output {
       kafka {
         # format is host1:port1,host2:port2 
-        bootstrap_servers => "${ELASTIFLOW_KAFKA_BOOTSTRAP_SERVER}:localhost:9092" 
-        topic_id => "${type}"
+        bootstrap_servers => "kafka1:9092,kafka2:9092,kafka3:9092" 
+        topic_id => "${[type]}"
         compression_type => "snappy"
         codec => "plain"
         # Acks can be one up to number of kafka servers. 
-        acks => 1
+        acks => "1"
         security_protocol => "PLAINTEXT"
-        enable_metric => yes
-        id => elastiflow_kafka_output
       }
 }
