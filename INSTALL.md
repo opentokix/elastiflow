@@ -204,6 +204,7 @@ backoff_ms: Number of milliseconds to wait to reconnect.
 * [Kafka output](logstash/elastiflow/conf.d/15_kafka_tansport.logstash.conf.disabled)
 * [Kafka input](logstash/elastiflow/conf.d/18_kafka_transport.logstash.conf.disabled)
 
+Replication factor can not be larger than your available number of brokers. 
 
 ```
 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 9 --topic ipfix
