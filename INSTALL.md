@@ -212,9 +212,9 @@ bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-fac
 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 9 --topic netflow
 
 # Setting retention of topics to 24 hours (This can be A LOT of data)
-bin/kafka-topics.sh --zookeeper localhost --alter --topic ipfix --config retention.ms=1440000
-bin/kafka-topics.sh --zookeeper localhost --alter --topic sflow --config retention.ms=1440000
-bin/kafka-topics.sh --zookeeper localhost --alter --topic netflow --config retention.ms=1440000
+bin/kafka-topics.sh --zookeeper localhost --alter --topic ipfix --config retention.ms=86400000
+bin/kafka-topics.sh --zookeeper localhost --alter --topic sflow --config retention.ms=86400000
+bin/kafka-topics.sh --zookeeper localhost --alter --topic netflow --config retention.ms=86400000
 ```
 
 **Logstash workers**

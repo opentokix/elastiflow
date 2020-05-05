@@ -2,9 +2,33 @@ output {
       kafka {
         # format is host1:port1,host2:port2 
         bootstrap_servers => "kafka1:9092,kafka2:9092,kafka3:9092" 
-        topic_id => "${[type]}"
+        topic_id => "ipfix"
         compression_type => "snappy"
-        codec => "plain"
+        codec => "json" 
+        # Acks can be one up to number of kafka servers. 
+        acks => "1"
+        security_protocol => "PLAINTEXT"
+      }
+}
+output {
+      kafka {
+        # format is host1:port1,host2:port2 
+        bootstrap_servers => "kafka1:9092,kafka2:9092,kafka3:9092" 
+        topic_id => "sflow"
+        compression_type => "snappy"
+        codec => "json" 
+        # Acks can be one up to number of kafka servers. 
+        acks => "1"
+        security_protocol => "PLAINTEXT"
+      }
+}
+output {
+      kafka {
+        # format is host1:port1,host2:port2 
+        bootstrap_servers => "kafka1:9092,kafka2:9092,kafka3:9092" 
+        topic_id => "netflow"
+        compression_type => "snappy"
+        codec => "json" 
         # Acks can be one up to number of kafka servers. 
         acks => "1"
         security_protocol => "PLAINTEXT"
