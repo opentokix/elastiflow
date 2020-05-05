@@ -1,0 +1,15 @@
+input {
+ kafka {
+    bootstrap_servers => "${ELASTIFLOW_KAFKA_BOOTSTRAP_SERVER}:localhost:9092" 
+    auto_offset_reset => "latest"
+    consumer_threads => 2
+    decorate_events => true 
+    reconnect_backoff_ms => 5000
+    security_protocol => "PLAINTEXT"
+    topics => ["ipfix", "sflow", "netflow" ]
+    codec => "plain"
+    enable_metric => true
+    id => "elastiflow_kafka_input"
+    type => "[@metadata][kafka][topic]"
+  }
+}

@@ -182,6 +182,45 @@ ELASTIFLOW_IPFIX_UDP_RCV_BUFF | The socket receive buffer size (bytes) for IPFIX
 
 > WARNING! Increasing `queue_size` will increase heap_usage. Make sure have configured JVM heap appropriately as specified in the [Requirements](#requirements)
 
+### 6b. Configure Kafka (Advanced) [NOT REQUIRED]
+
+This system depends on you having a kafka system running to begin with, and that you are comfortable running.
+
+Kafka can be used as a buffering, and load balancing for high volume flows of data. This would be considered an advanced configuration where you divide the elastiflow system onto two system. 
+
+You have to make some changes to the configuration files in order to get SSL transport, and manually create topics in kafka and such. 
+
+**Settings to take note of:**
+
+acks: How many kafka servers should ack the message before it is "delivered" 
+backoff_ms: Number of milliseconds to wait to reconnect. 
+
+**Original Design:**
+[Flow source] -> [LogStash filtering] -> [ES]
+
+**Kafka Design:**
+[Flow source] -> [LogStash] -> [Kafka] -> [LogStash filtering] -> [ES]
+
+* [Kafka output](logstash/elastiflow/conf.d/15_kafka_tansport.logstash.conf.disabled)
+* [Kafka input](logstash/elastiflow/conf.d/18_kafka_transport.logstash.conf.disabled)
+
+
+```
+bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 9 --topic ipfix
+bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 9 --topic sflow
+bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 9 --topic netflow
+
+# Setting retention of topics to 24 hours (This can be A LOT of data)
+bin/kafka-topics.sh --zookeeper localhost --alter --topic ipfix --config retention.ms=1440000
+bin/kafka-topics.sh --zookeeper localhost --alter --topic sflow --config retention.ms=1440000
+bin/kafka-topics.sh --zookeeper localhost --alter --topic netflow --config retention.ms=1440000
+```
+
+**Logstash workers**
+
+This configuration will let you use up to nine workers to filter and consume data. This can be running in kubernetes or some other container orchestration system. 
+
+
 ### 7. Configure the Elasticsearch output
 
 Obviously the data needs to land in Elasticsearch, so you need to tell Logstash where to send it.
